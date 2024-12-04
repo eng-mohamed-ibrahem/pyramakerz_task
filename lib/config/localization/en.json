@@ -1,0 +1,23 @@
+{
+    "common": {
+        
+    }
+    ,
+    "speech": {
+        "title": "Speech Recognition",
+        "init": "Initializing Speech Recognition",
+        "hint": "Tap the microphone to start recording.",
+        "recognized_words":"Recognized Words",
+        "unavailable":"Speech recognition not available on this device.",
+        "listen_error":"Something went wrong while listening. Please try again later.",
+        "history": "History",
+        "history_empty": "No history yet."
+    },
+    "detection":{
+        "title": "Object Detection",
+        "init": "Initializing Object Detection",
+        "recognized_objects":"Recognized Objects",
+        "unavailable":"Object detection not available on this device."
+    }
+
+}
