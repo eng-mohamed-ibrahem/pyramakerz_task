@@ -7,7 +7,8 @@ The application contains two features:
 1. Speech recognition: The user can tap the microphone and speak. The application will recognize the spoken words and display them on the screen.
 2. Object detection: The application will detect objects in the **real-time** camera feed and display them on the screen.
 
-The application is written in Flutter, a cross-platform mobile app development framework created by Google.
+## Speech Recognition
+https://drive.google.com/file/d/1-eNrRGtwmAMBagbqjHWK1qkNlbqkcuX0/view?usp=drivesdk
 
 ## How to build
 
