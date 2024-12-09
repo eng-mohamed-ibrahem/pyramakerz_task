@@ -1,9 +1,9 @@
 import 'package:camera/camera.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pyramakerz_task/model/bounding_box.dart';
 import 'package:pyramakerz_task/viewmodel/object_detection_viewmodel/object_detection_viewmodel.dart';
+import 'package:pyramakerz_task/views/widgets/object_detection_painter.dart';
 
 class ObjectDetectionScreen extends StatefulWidget {
   const ObjectDetectionScreen({super.key});
@@ -64,43 +64,21 @@ class _ObjectDetectionScreenState extends State<ObjectDetectionScreen>
 
           return Stack(
             children: [
-              CameraPreview(
-                context.read<ObjectDetectionViewmodel>().cameraController,
+              Positioned.fill(
+                child: CameraPreview(
+                  context.read<ObjectDetectionViewmodel>().cameraController,
+                ),
               ),
-              // ...context
-              //     .read<ObjectDetectionViewmodel>()
-              //     .detectedObject
-              //     .map((box) => buildBoundingBox(box)),
-              buildBoundingBox(context
-                  .read<ObjectDetectionViewmodel>()
-                  .detectedObject),
+              Positioned.fill(
+                child: CustomPaint(
+                  painter: ObjectDetectionPainter(
+                    context.read<ObjectDetectionViewmodel>().detectedObjects,
+                  ),
+                ),
+              ),
             ],
           );
         },
-      ),
-    );
-  }
-
-  Widget buildBoundingBox(BoundingBox? box) {
-    if (box == null) return const SizedBox.shrink();
-    var size = MediaQuery.sizeOf(context);
-    return Positioned(
-      right: box.x * 700,
-      top: box.y * 500,
-      child: Container(
-        width: box.width * size.width,
-        height: box.height * size.height,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.green, width: 2),
-        ),
-        child: Text(
-          "${box.label} ${(box.confidence * 100).toStringAsFixed(1)}%",
-          style: const TextStyle(
-            color: Colors.white,
-            backgroundColor: Colors.black54,
-            fontSize: 12,
-          ),
-        ),
       ),
     );
   }

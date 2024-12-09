@@ -1,7 +1,8 @@
 import 'dart:developer';
 
 import 'package:camera/camera.dart';
-import 'package:flutter_tflite/flutter_tflite.dart';
+// import 'package:flutter_tflite/flutter_tflite.dart';
+import 'package:tflite_v2/tflite_v2.dart';
 import 'package:pyramakerz_task/core/error/failure.dart';
 import 'package:pyramakerz_task/core/result_handler/result_handler.dart';
 import 'package:pyramakerz_task/model/bounding_box.dart';
@@ -13,7 +14,11 @@ class ObjectDetectionRepo {
   Future<ResultHandler<CameraController, Failure>> initalizeCamera() async {
     try {
       _cameras = await availableCameras();
-      controller = CameraController(_cameras[0], ResolutionPreset.medium);
+      controller = CameraController(
+        _cameras[0],
+        ResolutionPreset.medium,
+        enableAudio: false,
+      );
       await controller.initialize();
       return ResultHandler.success(data: controller);
     } catch (e) {
@@ -41,35 +46,26 @@ class ObjectDetectionRepo {
     );
   }
 
-  Future<BoundingBox?> objectDetection(CameraImage img) async {
+  Future<List<BoundingBox>?> objectDetection(CameraImage img) async {
     var recognitions = await Tflite.detectObjectOnFrame(
-      bytesList: img.planes.map((plane) {
-        return plane.bytes;
-      }).toList(),
-      model: "SSDMobileNet",
-      imageHeight: img.height,
-      imageWidth: img.width,
-      imageMean: 127.5,
-      imageStd: 127.5,
-      rotation: 90,
-      threshold: 0.1,
-      asynch: true,
-      numResultsPerClass: 2,
+       bytesList: img.planes.map((plane) => plane.bytes).toList(),
+        imageHeight: img.height,
+        imageWidth: img.width,
+        imageMean: 127.5,
+        imageStd: 127.5,
+        numResultsPerClass: 2,
+        threshold: 0.2,
     );
 
     if (recognitions != null) {
       log("detect objects: $recognitions");
-      // if (recognitions['confidenceInClass'] * 100 > 50) {}
-      // return recognitions
-      //     .map(
-      //       (recognition) => BoundingBox.fromRecognition(
-      //         (recognition as Map).cast<String, dynamic>(),
-      //       ),
-      //     )
-      //     .toList();
-      if (recognitions[0]['confidenceInClass'] * 100 > 45) {
-        return BoundingBox.fromRecognition(recognitions[0]);
-      }
+      return recognitions
+          .map(
+            (recognition) => BoundingBox.fromRecognition(
+              (recognition as Map).cast<String, dynamic>(),
+            ),
+          )
+          .toList();
     }
     return null;
   }

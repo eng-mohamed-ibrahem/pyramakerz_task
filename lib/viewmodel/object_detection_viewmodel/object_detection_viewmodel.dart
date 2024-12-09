@@ -33,7 +33,7 @@ class ObjectDetectionViewmodel extends Cubit<ObjectDetectionState> {
   }
 
   List<BoundingBox> detectedObjects = [];
-   BoundingBox? detectedObject;
+  BoundingBox? detectedObject;
   void detectObjects() {
     int cameraCounts = 0;
     cameraController.startImageStream(
@@ -41,8 +41,8 @@ class ObjectDetectionViewmodel extends Cubit<ObjectDetectionState> {
         cameraCounts++;
         if (cameraCounts % 10 == 0) {
           cameraCounts = 0;
-          // detectedObjects = await _objectDetectionRepo.objectDetection(image);
-          detectedObject = await _objectDetectionRepo.objectDetection(image);
+          detectedObjects =
+              await _objectDetectionRepo.objectDetection(image) ?? [];
           emit(ObjectdetectionSuccess());
         }
       },

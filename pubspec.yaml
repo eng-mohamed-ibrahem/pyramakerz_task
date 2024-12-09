@@ -35,7 +35,8 @@ dependencies:
   # to preview camera stream realtime as widget
   camera: ^0.11.0+2
   # to load dataset from tensorflow models
-  flutter_tflite: ^1.0.1
+  # flutter_tflite: ^1.0.1
+  tflite_v2: ^1.0.0
 
 dev_dependencies:
   flutter_test:
